@@ -1,0 +1,11 @@
+Attempting to connect to camera at port no. 1
+Attempting to connect to camera at port no. 2
+Attempting to connect to camera at port no. 3
+Attempting to connect to camera at port no. 4
+Attempting to connect to camera at port no. 5
+Connected to camera at port no. 5
+Motor controller connected!
+Started Mot_Ctrl thread
+Started Frame_acq thread
+ * Serving Flask app 'websitetest'
+ * Debug mode: off

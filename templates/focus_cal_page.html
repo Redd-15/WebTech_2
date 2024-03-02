@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Autofocus Calibration</title>
+</head>
+<!-- YELLOW GOLD #DCB13C / AQUA #57BDA2 / TEAL #2493A2 MEDIUM BLUE #304A78 / NAVY BLUE #2C3259 / DARK BLUE #0A0E28 -->
+<style>
+    .CamFeed1 {
+        float: right;
+        width: 25%;
+        min-width: 380px;
+        margin: 1%;
+        margin-top: 0px;
+    }
+
+    .CamFeed2 {
+        float: left;
+        width: 60%;
+        min-width: 380px;
+        margin: 1%;
+    }
+
+    h2 {
+        border-top: 2px solid #57BDA2;
+        padding-top: 5px;
+        margin-bottom: 8px;
+    }
+
+    .top_bar {
+        float: left;
+        margin-top: 1px;
+        background-color: #2C3259;
+        border: 5px solid #DCB13C;
+        padding: 1%;
+        width: 100%;
+        min-width: 380px;
+    }
+
+    .top_bar2 {
+        float: left;
+        margin-top: 1px;
+        background-color: #2C3259;
+        border: 5px solid #DCB13C;
+        padding: 10px;
+        width:25%; 
+        min-width: 380px; 
+    }
+
+    .in-bar {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .stop_btn {
+        width: 150px;
+        height: 50px;
+        background-color: crimson;
+        color: white;
+        font-weight: bold;
+    }
+
+    table.td * {
+        height: 35px;
+        min-width: 35px;
+
+    }
+
+    table {
+        width: 100%;
+        text-align: center;
+    }
+
+    .btn_move {
+        background-color: #DCB13C;
+        color: black;
+        font-weight: bold;
+        height: 45px;
+        width: 45px;
+    }
+
+    @media screen and (max-width: 1500px) {
+
+        .CamFeed1,
+        .CamFeed2,
+        .top_bar {
+            width: 100%;
+        }
+
+        .stop_btn {
+            width: 100%;
+        }
+
+        .coord_tab {
+            width: 40%;
+        }
+
+        .in-bar {
+            display: block;
+        }
+    }
+
+    @media screen and (max-width: 500px) {
+
+        .CamFeed1,
+        .CamFeed2,
+        .top_bar {
+            min-width: 360px;
+        }
+    }
+</style>
+
+<body style="background-color: #0A0E28; color: white">
+
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+                    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+                <script>
+                    function update() {
+                        $.get("/coord_x", function (data) {
+                            $("#coordx").html(data)
+                        });
+                        $.get("/coord_y", function (data) {
+                            $("#coordy").html(data)
+                        });
+                    }
+
+                    function updateSite(){
+                        
+                        $.get("/pageID", function (data) {
+                            if (data != 2){
+                                location.href = location.href;
+                            }
+                        });
+                    }
+                    
+                    update()
+                    var intervalId = setInterval(function () {
+                        update()
+                    }, 1000);
+
+                    var intervalId = setInterval(function () {
+                        updateSite()
+                    }, 2000);
+
+                </script>
+          
+    <div class="top_bar2">
+        
+        <h1 style="margin: 0px;">Microscope Focus Calibration</h1><p style="margin: 0px;">by David Sikora</p>
+            
+        <h2 style="margin: 10px; margin-left: 0px;">Canvas data:</h2> 
+        <form method="post" action="/">
+            <table style="width: 100%; height: 100px; text-align: left;">
+                <td><p style="margin: 0px; font-size: 20px;">Width : {{ x_data }} ; Height: {{ y_data }}</p></td>
+                <td><p style="margin: 0px; font-size: 22px;">Current Coords:</p></td>
+                <td>
+                    <h1 style="margin: 10px; margin-left: 0px; font-size: 25px;">
+                        <table class="coord_tab">
+                            <tr>
+                                <td>
+                                    <p style="margin: 0px;" id="coordx"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p style="margin: 0px;" id="coordy"></p>
+                                </td>
+                            </tr>
+                        </table>
+                    </h1>
+                </td>
+            </table>
+        </form>
+
+        <div>
+            <h2>Autofocus controlls:</h2>
+                <form method="post" action="/">
+                    <table>
+                        <tr>
+                            <td><input style="width: 150px; height: 50px; background-color: rgba(0, 255, 255, 0.8); color: black; font-weight: bold;" type="submit" value="Set 0 coord" name="FMain"/></td>
+                            <td><h3 style="font-size: 20pt; font-weight: bold;" for="Fname">{{focus_coords}}</h3></td>
+                            
+                                
+                        
+            
+                            <div></div>
+                        </tr>
+                        <tr>
+                            <td><input style="width: 150px; height: 50px; background-color: forestgreen; color: white; font-weight: bold;" type="submit" value="{{focus_step}}" name="FMain"/></td>
+                            <td><input class="stop_btn" type="submit" value="Cancel" name="FMain" /></td>
+
+                        </tr>
+                    </table>
+                
+                </form>
+            <h2>Movement controlls:</h2>
+            <form method="post" action="/">
+                <table>
+                    <tr style="height:40px">
+                        <td><input class="btn_move" style="background-color: rgba(0, 255, 255, 0.8); padding: 0px; font-weight: bold;" type="submit" value="ON" name="POLM"/></td>
+                        <td><input class="btn_move" type="submit" value="↑" name="Move"/></td>
+                        <td><input class="btn_move" style="background-color: rgba(0, 255, 255, 0.8); padding: 0px; font-weight: bold;" type="submit" value="OFF" name="POLM"/></td>
+                        <td>
+                            <td><input style="width: 150px; height: 50px; background-color: rgba(0, 255, 255, 0.8); color: black; font-weight: bold;" type="submit" value="Back to 0 point" name="FMain" /></td>
+                        </td>
+                    </tr>
+                    <tr style="height:40px">
+                        <td><input class="btn_move" type="submit" value="←" name="Move"/></td>
+                        <td><input style="background-color: rgba(0, 255, 255, 0.8);" class="btn_move" type="submit" value="F" name="FOC" /></td>
+                        <td><input class="btn_move" type="submit" value="→" name="Move" /></td>
+                        <td style="width: 30px;"></td>
+                        <td>
+                            <label style="font-size: 16pt; font-weight: bold;" for="Steps">Number of steps:</label><br>
+                            <input type="text" id = "Steps" name="Steps" value = "{{ stp_data }}" />
+                        </td>
+                    </tr>
+                    <tr style="height:40px">
+                        <td></td>
+                        <td><input class="btn_move" type="submit" value="↓" name="Move" /></td>
+                        <td></td>
+                    </tr>
+
+                </table>
+                
+            </form>
+            <h6></h6>
+            <form method="post" action="/">
+                <table>
+                    <td><input style="width: 150px; height: 75px; background-color: crimson; color: white; font-weight: bold;" type="submit" value="STOP" name="STOP"/></td>
+                    <td><h4 style="margin: 0px; color: crimson;">LAST ERROR MESSAGE: {{ERROR}}</h4></td>
+                </table>
+                
+            </form>
+                
+        </div>
+    </div>
+
+    <div>
+        <div class="CamFeed2">
+            <a href="/video_live">
+                <img style="border: 5px solid #2493A2" src="{{ url_for('video_live') }}" width="100%">
+            </a>
+        </div>
+    </div>
+
+
+
+
+</body>
+
+</html>
